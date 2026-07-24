@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:id="rootPane" fx:controller="com.safora.client.controllers.ProfileController" style="-fx-background-color: #F8F2E7;">
+    
+    <VBox alignment="CENTER" pickOnBounds="false">
+        <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+        
+        <!-- Main Card -->
+        <VBox styleClass="card" spacing="15" maxWidth="500" style="-fx-background-color: #FFFDF8; -fx-padding: 30; -fx-background-radius: 12px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
+            
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Button text="← Back" onAction="#handleBack" styleClass="secondary-button" style="-fx-background-color: transparent; -fx-padding: 0;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+            
+            <VBox alignment="CENTER" spacing="5">
+                <Circle radius="40" fill="#D4A373"/>
+                <Label fx:id="nameLabel" text="Nidhi" styleClass="title" style="-fx-font-size: 20px; -fx-padding: 10 0 0 0;"/>
+                <Label fx:id="emailLabel" text="Verified User" style="-fx-text-fill: #10B981; -fx-font-weight: bold;"/>
+            </VBox>
+            
+            <Label text="────────────────────────────────────────────────" style="-fx-text-fill: #EAEAEA; -fx-alignment: center;"/>
+            
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Emergency Contacts" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F; -fx-font-size: 14px;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="+ Add" onAction="#handleShowAddContactModal" style="-fx-background-color: transparent; -fx-text-fill: #D4A373; -fx-cursor: hand; -fx-padding: 0;"/>
+                </HBox>
+                <VBox fx:id="emergencyContactsContainer" spacing="5">
+                    <!-- Populated dynamically -->
+                </VBox>
+            </VBox>
+
+            <Label text="────────────────────────────────────────────────" style="-fx-text-fill: #EAEAEA; -fx-alignment: center;"/>
+
+            <VBox spacing="10">
+                <Label text="Journey History" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F; -fx-font-size: 14px;"/>
+                <VBox fx:id="historyContainer" spacing="5">
+                    <!-- Populated dynamically -->
+                </VBox>
+            </VBox>
+            
+            <Label text="────────────────────────────────────────────────" style="-fx-text-fill: #EAEAEA; -fx-alignment: center;"/>
+
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Reports Submitted" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F; -fx-font-size: 14px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="3" style="-fx-text-fill: #2C2C2C;"/>
+            </HBox>
+            
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Preferred Transport" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F; -fx-font-size: 14px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="prefModeLabel" text="Drive" style="-fx-text-fill: #2C2C2C;"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Settings" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F; -fx-font-size: 14px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="›" style="-fx-text-fill: #666; -fx-font-size: 18px;"/>
+            </HBox>
+            
+            <HBox alignment="CENTER_LEFT">
+                <Label text="About Safora" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F; -fx-font-size: 14px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="v1.0" style="-fx-text-fill: #666;"/>
+            </HBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <Button text="Logout" onAction="#handleLogout" styleClass="danger-button" maxWidth="Infinity" style="-fx-padding: 12px; -fx-margin: 20 0 0 0;"/>
+            
+        </VBox>
+    </VBox>
+
+    <!-- In-Page Modal for Add/Edit Contact -->
+    <StackPane fx:id="contactModalOverlay" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
+        <VBox alignment="CENTER" pickOnBounds="false">
+            <VBox maxWidth="400" styleClass="floating-panel" spacing="20">
+                <Label fx:id="modalTitleLabel" text="Add Emergency Contact" styleClass="title" style="-fx-font-size: 20px;"/>
+                
+                <TextField fx:id="contactNameField" promptText="Contact Name (e.g. Mother)" styleClass="input-field" />
+                <TextField fx:id="contactPhoneField" promptText="Phone Number" styleClass="input-field" />
+                
+                <Label fx:id="modalErrorLabel" text="" visible="false" style="-fx-text-fill: #C62828;"/>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Cancel" onAction="#handleCloseModal" styleClass="secondary-button"/>
+                    <Button fx:id="modalSaveButton" text="Save Contact" onAction="#handleSaveContact" styleClass="primary-button"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </StackPane>
+</StackPane>

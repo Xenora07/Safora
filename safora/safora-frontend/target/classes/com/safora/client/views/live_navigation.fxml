@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import com.safora.client.components.MapViewComponent?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:id="rootPane" fx:controller="com.safora.client.controllers.LiveNavigationController" style="-fx-background-color: #F8F2E7;">
+    
+    <!-- Real Map -->
+    <MapViewComponent fx:id="mapView" />
+
+    <!-- Top Floating Panel (Header + Progress) -->
+    <VBox alignment="TOP_CENTER" pickOnBounds="false">
+        <padding><Insets top="30" right="20" bottom="0" left="20"/></padding>
+        <VBox alignment="CENTER" spacing="15" styleClass="floating-panel" maxWidth="650">
+            <Label fx:id="navigationDestinationLabel" text="Navigating to Destination" styleClass="title" style="-fx-font-size: 20px;"/>
+            
+            <HBox alignment="CENTER" spacing="40">
+                <VBox alignment="CENTER" spacing="2">
+                    <Label fx:id="timeLabel" text="-- min" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
+                    <Label text="⏱ Remaining Time" styleClass="subtitle" style="-fx-font-size: 13px;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="2">
+                    <Label fx:id="distanceLabel" text="-- km" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2C2C2C;"/>
+                    <Label text="📍 Distance" styleClass="subtitle" style="-fx-font-size: 13px;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="2">
+                    <Label fx:id="safetyLabel" text="95%" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #B08968;"/>
+                    <Label text="🛡 Safety Score" styleClass="subtitle" style="-fx-font-size: 13px;"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="2">
+                    <Label fx:id="modeLabel" text="Drive" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2C2C2C;"/>
+                    <Label text="🚗 Mode" styleClass="subtitle" style="-fx-font-size: 13px;"/>
+                </VBox>
+            </HBox>
+            <!-- Progress Bar Text -->
+            <VBox alignment="CENTER" spacing="2" style="-fx-padding: 10 0 0 0;">
+                <Label text="Journey Progress" styleClass="subtitle" style="-fx-font-size: 12px; -fx-text-fill: #666; -fx-font-weight: bold;"/>
+                <Label fx:id="progressBarLabel" text="░░░░░░░░░░░░░░░░&#10;0% Complete" textAlignment="CENTER" style="-fx-font-family: 'Courier New'; -fx-font-size: 14px; -fx-text-fill: #2C2C2C; -fx-font-weight: bold;"/>
+            </VBox>
+        </VBox>
+    </VBox>
+
+    <!-- Side Panels Container -->
+    <HBox pickOnBounds="false" alignment="CENTER">
+        <padding><Insets top="150" right="20" bottom="150" left="20"/></padding>
+        
+        <!-- Left Panel: Checkpoints -->
+        <VBox fx:id="checkpointsPanel" styleClass="floating-panel" alignment="TOP_LEFT" spacing="10" maxWidth="250" pickOnBounds="false">
+            <Label text="Journey Progress" styleClass="subtitle" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F;"/>
+            <VBox fx:id="checkpointsListContainer" spacing="10">
+                <!-- Checkpoints injected dynamically -->
+            </VBox>
+        </VBox>
+        
+        <Region HBox.hgrow="ALWAYS" pickOnBounds="false"/>
+        
+        <!-- Right Panel: Evolving Context Chips -->
+        <VBox fx:id="evolvingContextPanel" styleClass="floating-panel" alignment="TOP_LEFT" spacing="10" maxWidth="250" pickOnBounds="false">
+            <Label text="Journey Status" styleClass="subtitle" style="-fx-font-weight: bold; -fx-text-fill: #6F2C2F;"/>
+            <VBox fx:id="contextChipsContainer" spacing="10">
+                <!-- Chips injected dynamically -->
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <!-- Bottom Floating Panel (Actions) -->
+    <VBox alignment="BOTTOM_CENTER" pickOnBounds="false">
+        <padding><Insets top="0" right="20" bottom="30" left="20"/></padding>
+        <VBox alignment="CENTER" spacing="15" styleClass="floating-panel" maxWidth="600">
+            <VBox spacing="15" alignment="CENTER" maxWidth="500">
+                <HBox spacing="15">
+                    <Button text="🚨 SOS" onAction="#handleSOS" styleClass="danger-button" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                    <Button text="⚠️ Report Incident" onAction="#handleReportIncident" styleClass="secondary-button" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                </HBox>
+                <HBox spacing="15">
+                    <Button text="📍 Share Location" onAction="#handleShareLocation" styleClass="secondary-button" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                    <Button fx:id="continueJourneyBtn" text="Continue Journey →" onAction="#handleContinueJourney" styleClass="primary-button" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </VBox>
+
+    <!-- Modals -->
+    
+    <!-- Context-Aware Route Update Modal -->
+    <StackPane fx:id="routeUpdateModal" style="-fx-background-color: rgba(0,0,0,0.6);" visible="false">
+        <VBox alignment="CENTER" pickOnBounds="false">
+            <VBox style="-fx-background-color: #FFFDF8; -fx-background-radius: 12px; -fx-padding: 25;" maxWidth="400" spacing="15">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Route Update" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #6F2C2F;"/>
+                </HBox>
+                
+                <Label text="New community reports detected ahead.&#10;A safer route is now available." wrapText="true" style="-fx-font-size: 14px; -fx-text-fill: #2C2C2C; -fx-font-weight: bold; -fx-line-spacing: 4px;"/>
+                
+                <HBox spacing="15" style="-fx-padding: 10 0 0 0;">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Current route" style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
+                        <Label text="28 min" style="-fx-text-fill: #2C2C2C; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                        <Label text="Safety 82%" style="-fx-text-fill: #F59E0B; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Recommended route" style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
+                        <Label text="31 min" style="-fx-text-fill: #2C2C2C; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                        <Label text="Safety 91%" style="-fx-text-fill: #10B981; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox spacing="5" alignment="CENTER_RIGHT">
+                        <Region VBox.vgrow="ALWAYS"/>
+                        <Label text="+3 minutes" style="-fx-text-fill: #F59E0B; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+                        <Label text="+9% safer" style="-fx-text-fill: #10B981; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 20 0 0 0;">
+                    <Button text="Stay on Current Route" onAction="#handleStayOnRoute" styleClass="secondary-button" />
+                    <Button text="Switch Route" onAction="#handleSwitchRoute" styleClass="primary-button" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </StackPane>
+
+    <!-- SOS Modal -->
+    <StackPane fx:id="sosModal" style="-fx-background-color: rgba(0,0,0,0.7);" visible="false">
+        <VBox alignment="CENTER" pickOnBounds="false">
+            <VBox maxWidth="380" styleClass="floating-panel" spacing="20" alignment="CENTER">
+                <Label text="🚨 SOS Initiated" styleClass="title" style="-fx-font-size: 24px; -fx-text-fill: #C62828;"/>
+                <Label text="Emergency contacts notified" wrapText="true" textAlignment="CENTER" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2C2C2C;"/>
+                <Label text="Police escalation in" wrapText="true" textAlignment="CENTER" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                <Label fx:id="sosCountdownLabel" text="60" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #C62828;"/>
+                <VBox spacing="10" maxWidth="Infinity">
+                    <Button text="Cancel SOS (I am safe)" onAction="#handleCloseModal" styleClass="secondary-button" maxWidth="Infinity"/>
+                </VBox>
+            </VBox>
+        </VBox>
+    </StackPane>
+
+    <!-- Share Location Modal -->
+    <StackPane fx:id="shareModal" style="-fx-background-color: rgba(0,0,0,0.7);" visible="false">
+        <VBox alignment="CENTER" pickOnBounds="false">
+            <VBox maxWidth="380" styleClass="floating-panel" spacing="20" alignment="CENTER">
+                <Label text="📍 Live Tracking" styleClass="title" style="-fx-font-size: 24px;"/>
+                <Label text="Journey shared with" wrapText="true" textAlignment="CENTER" style="-fx-font-weight: bold;"/>
+                <VBox fx:id="contactsListContainer" spacing="10" alignment="CENTER_LEFT">
+                    <!-- Populated dynamically -->
+                </VBox>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Status" style="-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #666;"/>
+                    <Label text="Shared Successfully" style="-fx-text-fill: #10B981; -fx-font-weight: bold;"/>
+                    <Label text="Last Updated" style="-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #666;"/>
+                    <Label fx:id="shareLastUpdatedLabel" text="--:--" style="-fx-text-fill: #2C2C2C;"/>
+                </VBox>
+                <Button text="Close" onAction="#handleCloseModal" styleClass="secondary-button" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </StackPane>
+
+    <!-- Report Incident Modal -->
+    <StackPane fx:id="reportModal" style="-fx-background-color: rgba(0,0,0,0.7);" visible="false">
+        <VBox alignment="CENTER" pickOnBounds="false">
+            <VBox maxWidth="400" styleClass="floating-panel" spacing="20" alignment="CENTER">
+                <Label text="⚠️ Report Incident" styleClass="title" style="-fx-font-size: 24px; -fx-text-fill: #6F2C2F;"/>
+                <Label text="Help the community by reporting hazards." wrapText="true" textAlignment="CENTER" styleClass="subtitle"/>
+                <VBox spacing="5" maxWidth="Infinity">
+                    <Label text="⚠ Incident Type" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="incidentCategoryCombo" promptText="Select Category" maxWidth="Infinity" styleClass="combo-box"/>
+                </VBox>
+                <VBox spacing="5" maxWidth="Infinity">
+                    <Label text="🔴 Severity" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="incidentSeverityCombo" promptText="Select Severity" maxWidth="Infinity" styleClass="combo-box"/>
+                </VBox>
+                <VBox spacing="5" maxWidth="Infinity">
+                    <Label text="📝 Description" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="incidentDescField" promptText="Description (optional)" styleClass="input-field" />
+                </VBox>
+                <Label fx:id="reportStatusLabel" text="" visible="false" />
+                <HBox spacing="10" alignment="CENTER_RIGHT" maxWidth="Infinity">
+                    <Button text="Cancel" onAction="#handleCloseModal" styleClass="secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button text="Submit Report" onAction="#handleSubmitReport" styleClass="primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </StackPane>
+</StackPane>

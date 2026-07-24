@@ -1,0 +1,12 @@
+com/safora/client/controllers/RegisterController.class
+com/safora/client/dto/RouteOptionDto.class
+module-info.class
+com/safora/client/FxmlValidator.class
+com/safora/client/map/MapController.class
+com/safora/client/location/LocationProvider.class
+com/safora/client/location/MockLocationProvider.class
+com/safora/client/components/LoadingOverlay.class
+com/safora/client/dto/CreateReportRequest.class
+com/safora/client/services/SafetyReportService.class
+com/safora/client/dto/SafetyReportResponse.class
+com/safora/client/location/Location.class

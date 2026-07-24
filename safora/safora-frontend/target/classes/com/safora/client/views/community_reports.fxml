@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import com.safora.client.components.MapViewComponent?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:id="rootPane" fx:controller="com.safora.client.controllers.CommunityReportsController" style="-fx-background-color: #F8F2E7;">
+    
+    <VBox spacing="0" alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+        
+        <!-- Header -->
+        <VBox spacing="5" alignment="CENTER" style="-fx-padding: 20px 20px 10px 20px; -fx-background-color: #F8F2E7;">
+            <Label text="Community Reports" styleClass="title" />
+            <Label text="Help others travel safely." styleClass="subtitle" />
+        </VBox>
+        
+        <!-- Interactive Map for Reports -->
+        <MapViewComponent fx:id="mapView" VBox.vgrow="ALWAYS" />
+
+        <!-- List Container Overlay (Drawer style) -->
+        <VBox styleClass="floating-panel" style="-fx-background-radius: 20px 20px 0 0;" maxHeight="300">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            <Label text="Nearby Incidents" styleClass="title" style="-fx-font-size: 16px; -fx-padding: 0 0 10px 0;"/>
+            
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0;" VBox.vgrow="ALWAYS">
+                <VBox fx:id="reportsContainer" spacing="10" style="-fx-background-color: transparent;">
+                    <!-- Cards appended here dynamically -->
+                </VBox>
+            </ScrollPane>
+            
+            <Button text="+ Report Incident" onAction="#handleOpenReportDialog" styleClass="primary-button" maxWidth="Infinity" style="-fx-margin-top: 10px;"/>
+        </VBox>
+    </VBox>
+    
+    <!-- Back Button -->
+    <StackPane alignment="TOP_LEFT" pickOnBounds="false">
+        <padding><Insets top="20" left="20"/></padding>
+        <Button text="← Back" onAction="#handleBack" styleClass="secondary-button" style="-fx-border-color: transparent; -fx-background-color: rgba(255,253,248,0.8); -fx-background-radius: 20px;"/>
+    </StackPane>
+</StackPane>

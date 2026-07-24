@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+<?import com.safora.client.components.MapViewComponent?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:id="rootPane" fx:controller="com.safora.client.controllers.JourneySummaryController" style="-fx-background-color: #F8F2E7;">
+    
+    <VBox spacing="20" alignment="TOP_CENTER" maxWidth="500">
+        <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+        
+        <!-- Center Summary Card (Receipt Style) -->
+        <VBox spacing="0" styleClass="floating-panel" style="-fx-padding: 0; -fx-background-color: #FFFDF8; -fx-background-radius: 16px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 5);">
+            
+            <!-- Map Snapshot Header -->
+            <StackPane>
+                <MapViewComponent fx:id="mapView" VBox.vgrow="ALWAYS" minHeight="180" maxHeight="180" />
+                <VBox alignment="CENTER" style="-fx-background-color: rgba(111, 44, 47, 0.85); -fx-padding: 20px;">
+                    <StackPane>
+                        <Circle radius="30" fill="#2E7D32"/>
+                        <Label text="✓" style="-fx-font-size: 30px; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </StackPane>
+                    <Label text="Journey Completed" styleClass="title" style="-fx-font-size: 24px; -fx-text-fill: #FFFDF8; -fx-padding: 10 0 0 0;"/>
+                </VBox>
+            </StackPane>
+            
+            <VBox spacing="20" style="-fx-padding: 30px;">
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Destination" styleClass="subtitle" style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+                    <Label fx:id="destinationLabel" text="--" styleClass="title" style="-fx-font-size: 20px; -fx-text-fill: #6F2C2F;"/>
+                </VBox>
+                
+                <VBox spacing="10">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Travel Time" styleClass="subtitle" style="-fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="timeLabel" text="-- mins" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2C2C2C;"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Distance" styleClass="subtitle" style="-fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="distanceLabel" text="-- km" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2C2C2C;"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Safety Score" styleClass="subtitle" style="-fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="confidenceLabel" text="--%" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Dashed separator -->
+                <VBox style="-fx-border-color: #E7DCCF; -fx-border-style: dashed; -fx-border-width: 1 0 0 0; -fx-padding: 15px 0 0 0;"/>
+                
+                <HBox alignment="CENTER" spacing="40">
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Started" styleClass="subtitle" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="startedLabel" text="--" style="-fx-font-size: 14px; -fx-text-fill: #2C2C2C; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Ended" styleClass="subtitle" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="endedLabel" text="--" style="-fx-font-size: 14px; -fx-text-fill: #2C2C2C; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+                
+                <VBox style="-fx-border-color: #E7DCCF; -fx-border-style: dashed; -fx-border-width: 1 0 0 0; -fx-padding: 15px 0 0 0;"/>
+                
+                <!-- Detailed Metrics Area -->
+                <VBox spacing="10">
+                    <Label text="Journey Insights" styleClass="title" style="-fx-font-size: 16px; -fx-text-fill: #6F2C2F;"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="📍" style="-fx-font-size: 16px;"/>
+                        <Label text="Checkpoints Passed: " styleClass="subtitle" />
+                        <Label text="Police Station, Well-Lit Area" style="-fx-font-weight: bold; -fx-text-fill: #2C2C2C;"/>
+                    </HBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="🛡️" style="-fx-font-size: 16px;"/>
+                        <Label text="Risk Areas Avoided: " styleClass="subtitle" />
+                        <Label text="2 High-Risk Zones" style="-fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </VBox>
+        
+        <!-- Feedback Question -->
+        <VBox spacing="15" alignment="CENTER" style="-fx-padding: 10px 0 0 0;">
+            <Label text="Did you notice anything during your journey?" style="-fx-font-size: 16px; -fx-text-fill: #2C2C2C; -fx-font-weight: bold;"/>
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Skip" onAction="#handleSkip" styleClass="secondary-button" style="-fx-padding: 10px 30px;"/>
+                <Button text="Report Incident" onAction="#handleReportIncident" styleClass="warning-button" style="-fx-padding: 10px 30px;"/>
+            </HBox>
+        </VBox>
+        
+        <Region VBox.vgrow="ALWAYS" />
+        
+        <!-- Bottom Primary Button -->
+        <Button text="Return Home" onAction="#handleReturnHome" maxWidth="Infinity" styleClass="primary-button" style="-fx-padding: 14px;"/>
+        
+    </VBox>
+</StackPane>
